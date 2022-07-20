@@ -6,6 +6,7 @@ const userControllers = require("../controllers/user.controller");
 //Routing
 //Route auth
 router.post("/register", authControllers.signUp);
+router.post("/login", authControllers.signIn);
 
 //Route users
 router.get("/", userControllers.getAllUsers);
