@@ -2,6 +2,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 require("dotenv").config({ path: "./config/.env" });
 const userRoutes = require("./routes/user.routes");
+const itemRoutes = require("./routes/item.routes");
 
 require("./config/db");
 
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //routes
 app.use("/api/user", userRoutes);
+app.use("/api/item", itemRoutes);
 
 //server
 app.listen(PORT, () => {
