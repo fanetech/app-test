@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -12,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import API_BASIC from "../utility/api.service";
 
 function Copyright(props) {
   return (
@@ -34,10 +36,32 @@ function Copyright(props) {
 const theme = createTheme();
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+
   //handled login, send data
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    setMessage("");
+    const data = {
+      email,
+      password,
+    };
+
+    //send data
+    API_BASIC.post("/user/login", data)
+      .then((res) => {
+        if (res.data.errors) {
+          setMessage(res.data.errors);
+        }
+        if (res.data.data) {
+          console.log(res.data.data);
+        }
+      })
+      .catch((err) => {
+        console.log("login error => " + err);
+      });
   };
 
   return (
@@ -58,6 +82,11 @@ const Login = () => {
           <Typography component="h1" variant="h5">
             CONNECTION
           </Typography>
+          {message && (
+            <Alert key={message} variant="outlined" severity="error">
+              informations invalide
+            </Alert>
+          )}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -73,6 +102,7 @@ const Login = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -83,6 +113,7 @@ const Login = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={(e) => setPassword(e.target.value)}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}

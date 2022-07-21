@@ -30,7 +30,7 @@ module.exports.signIn = async (req, res) => {
   try {
     const user = await userModel.login(email, password);
     const token = createToken(user._id);
-    res.status(200).json({ userId: user._id, token });
+    res.status(200).json({ data: { userId: user._id, token } });
   } catch (err) {
     const errors = signInErrors(err);
     res.status(201).send({ errors });
