@@ -16,14 +16,15 @@ import { UidContext } from "./appContext";
 import cookie from "js-cookie";
 import { Link } from "@mui/material";
 import API_BASIC from "./utility/api.service";
+import { useSelector } from "react-redux";
 
 // const pages = ["Accueil", "Article", "Mes Article", "créer"];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const [userData, setUserData] = React.useState({});
   const uid = React.useContext(UidContext);
+  const userData = useSelector((state) => state.userReducer);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,21 +46,9 @@ const Navbar = () => {
       cookie.remove("jwt");
     }
   };
-  React.useEffect(() => {
-    if (uid) {
-      API_BASIC.get(`/user/${uid.userId}`)
-        .then((res) => {
-          setUserData(res.data);
-          console.log(userData);
-        })
-        .catch((err) => {
-          console.log("navbar get user info =>" + err);
-        });
-    }
-  }, [uid]);
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ marginbottom: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -151,7 +140,7 @@ const Navbar = () => {
                   <Typography textAlign="center">Mes article</Typography>
                 </MenuItem>
               </Link>
-              {uid?.userId && (
+              {uid && (
                 <Link
                   href="/creer"
                   variant="body2"
@@ -227,7 +216,7 @@ const Navbar = () => {
                 {"Mes article"}
               </Button>
             </Link>
-            {uid?.userId && (
+            {uid && (
               <Link href="/creer" variant="body2">
                 <Button
                   key={"creer"}
@@ -241,9 +230,10 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            <Button color="inherit">{userData?.pseudo}</Button>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src={userData?.picture} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -282,7 +272,7 @@ const Navbar = () => {
                   {"Profil"}
                 </Typography>
               </MenuItem>
-              {!uid?.userId && (
+              {!uid && (
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography
                     noWrap
@@ -298,7 +288,7 @@ const Navbar = () => {
                   </Typography>
                 </MenuItem>
               )}
-              {!uid?.userId && (
+              {!uid && (
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography
                     noWrap
@@ -314,7 +304,7 @@ const Navbar = () => {
                   </Typography>
                 </MenuItem>
               )}
-              {uid?.userId && (
+              {uid && (
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography
                     noWrap
