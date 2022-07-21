@@ -56,7 +56,11 @@ const Login = () => {
           setMessage(res.data.errors);
         }
         if (res.data.data) {
-          console.log(res.data.data);
+          let date = new Date(Date.now() + 86400000); //86400000ms = 1 jour
+          date = date.toUTCString();
+          document.cookie =
+            "jwt=" + res.data.data.token + "; path=/; expires=" + date;
+          window.location = "/";
         }
       })
       .catch((err) => {

@@ -5,7 +5,7 @@ const API_BASIC = axios.create({
   baseURL: `${DOMAINE_API}${ENPPOIN_API}`,
   headers: {
     "Content-Type": "application/json",
-    Authorization: `${getCookie("marchandJWT")}`,
+    Authorization: `${getCookie("jwt")}`,
   },
 
   timeout: "300000",

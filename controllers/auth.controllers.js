@@ -18,7 +18,7 @@ module.exports.signUp = async (req, res) => {
   //   create user object and add to db
   try {
     const user = await userModel.create({ pseudo, email, password });
-    res.status(200).json({ user: user._id });
+    res.status(200).json({ data: { user: user._id } });
   } catch (err) {
     const errors = signUpErrors(err);
     res.status(201).send({ errors });

@@ -1,6 +1,7 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import Alert from "@mui/material/Alert";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -12,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import API_BASIC from "../utility/api.service";
 
 function Copyright(props) {
   return (
@@ -34,13 +36,46 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Register() {
+  const [pseudo, setPseudo] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [passwordConfirm, setPasswordConfirm] = React.useState("");
+  const [fieldErr, setFieldErr] = React.useState("");
+  const [passErr, setPassErr] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [isResus, setIsResus] = React.useState(false);
   const handleSubmit = (event) => {
+    setFieldErr("");
+    setPassErr("");
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    if (pseudo && email && password && passwordConfirm) {
+      if (password === passwordConfirm) {
+        const data = {
+          pseudo,
+          email,
+          password,
+        };
+
+        //send data
+        API_BASIC.post("/user/register", data)
+          .then((res) => {
+            if (res.data.errors) {
+              setMessage(res.data.errors);
+            }
+            if (res.data.data) {
+              setIsResus(true);
+            }
+          })
+          .catch((err) => {
+            console.log("login error => " + err);
+          });
+      } else {
+        setPassErr("Les mots de passes ne correspond pas");
+      }
+    } else {
+      setFieldErr("Veuillez renseigner tous les champs");
+    }
   };
 
   return (
@@ -61,6 +96,21 @@ export default function Register() {
           <Typography component="h1" variant="h5">
             INSCRIPTION
           </Typography>
+          {isResus && (
+            <Alert key={fieldErr} variant="outlined" severity="success">
+              Enregistrement reussi veuillez vous connecter
+            </Alert>
+          )}
+          {fieldErr && (
+            <Alert key={fieldErr} variant="outlined" severity="error">
+              Veuillez renseigner tous les champs
+            </Alert>
+          )}
+          {passErr && (
+            <Alert key={passErr} variant="outlined" severity="error">
+              Les mots de passes ne correspond pas
+            </Alert>
+          )}
           <Box
             component="form"
             noValidate
@@ -77,6 +127,7 @@ export default function Register() {
                   id="firstName"
                   label="Pseudo"
                   autoFocus
+                  onChange={(e) => setPseudo(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -87,6 +138,7 @@ export default function Register() {
                   label="Adresse Email"
                   name="email"
                   autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -98,6 +150,19 @@ export default function Register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Confirmer Mot de passe"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                  onChange={(e) => setPasswordConfirm(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -111,7 +176,7 @@ export default function Register() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/login" variant="body2">
                   Vous avez un compte ? connexion
                 </Link>
               </Grid>

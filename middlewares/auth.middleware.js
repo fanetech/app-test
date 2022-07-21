@@ -17,11 +17,11 @@ module.exports.checkUser = (req, res, next) => {
 
 module.exports.requireAuth = (req, res, next) => {
   const token = req.header("Authorization");
-  if (!token) return res.status(400).json({ msg: "error" });
+  if (!token) return res.status(201).json({ msg: "error" });
 
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, decodedToken) => {
     if (err) {
-      res.status(400).json({ msg: "error" });
+      res.status(201).json({ msg: "error" });
     } else {
       res.status(200).json({ msg: "success", userId: decodedToken.id });
       next();

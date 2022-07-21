@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //mildelware
 //jwt check all get request if jwt token is exist
-app.get("/jwtid", authMiddleware.requireAuth);
+app.get("/api/jwtid", authMiddleware.requireAuth);
 app.get("*", authMiddleware.checkUser);
 
 //routes
