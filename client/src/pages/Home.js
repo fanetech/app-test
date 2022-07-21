@@ -1,9 +1,10 @@
 import React from "react";
+import ItemCard from "../components/items/ItemCard";
 
 function Home(props) {
   return (
     <div className="home-conatiner">
-      <h1>Home</h1>
+      <ItemCard />
     </div>
   );
 }

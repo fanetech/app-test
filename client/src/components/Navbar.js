@@ -12,13 +12,19 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import { UidContext } from "./appContext";
+import cookie from "js-cookie";
+import { Link } from "@mui/material";
+import API_BASIC from "./utility/api.service";
+import { useSelector } from "react-redux";
 
-const pages = ["Accueil", "Article", "Mes Article", "créer"];
-const settings = ["profil", "Logout"];
+// const pages = ["Accueil", "Article", "Mes Article", "créer"];
 
 const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const uid = React.useContext(UidContext);
+  const userData = useSelector((state) => state.userReducer);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -34,9 +40,15 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  const logout = () => {
+    if (window !== "undefined") {
+      window.location = "/";
+      cookie.remove("jwt");
+    }
+  };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" style={{ marginbottom: 0 }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -87,11 +99,65 @@ const Navbar = () => {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
+              {/* {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
+              <Link
+                href="/"
+                variant="body2"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <MenuItem key={"accueil"} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Accueil</Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                href="/all-article"
+                variant="body2"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <MenuItem key={"allArticle"} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Article</Typography>
+                </MenuItem>
+              </Link>
+              <Link
+                href="/article"
+                variant="body2"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <MenuItem key={"article"} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Mes article</Typography>
+                </MenuItem>
+              </Link>
+              {uid && (
+                <Link
+                  href="/creer"
+                  variant="body2"
+                  sx={{
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <Button
+                    key={"creer"}
+                    onClick={handleCloseNavMenu}
+                    sx={{ color: "black", textAlign: "center" }}
+                  >
+                    {"Créer"}
+                  </Button>
+                </Link>
+              )}
             </Menu>
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
@@ -114,7 +180,7 @@ const Navbar = () => {
             A-ARTICLE
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -122,13 +188,52 @@ const Navbar = () => {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
+            <Link href="/" variant="body2">
+              <Button
+                key={"accueil"}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {"Accueil"}
+              </Button>
+            </Link>
+            <Link href="/all-article" variant="body2">
+              <Button
+                key={"Allarticle"}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {"Article"}
+              </Button>
+            </Link>
+            <Link href="/article" variant="body2">
+              <Button
+                key={"article"}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: "white", display: "block" }}
+              >
+                {"Mes article"}
+              </Button>
+            </Link>
+            {uid && (
+              <Link href="/creer" variant="body2">
+                <Button
+                  key={"creer"}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {"Créer"}
+                </Button>
+              </Link>
+            )}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            <Button color="inherit">{userData?.pseudo}</Button>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src={userData?.picture} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -167,20 +272,54 @@ const Navbar = () => {
                   {"Profil"}
                 </Typography>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <Typography
-                  noWrap
-                  component="a"
-                  textAlign="center"
-                  href="/login"
-                  sx={{
-                    textDecoration: "none",
-                    color: "inherit",
-                  }}
-                >
-                  {"Login"}
-                </Typography>
-              </MenuItem>
+              {!uid && (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    noWrap
+                    component="a"
+                    textAlign="center"
+                    href="/login"
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    {"Connexion"}
+                  </Typography>
+                </MenuItem>
+              )}
+              {!uid && (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    noWrap
+                    component="a"
+                    textAlign="center"
+                    href="/register"
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                  >
+                    {"Inscription"}
+                  </Typography>
+                </MenuItem>
+              )}
+              {uid && (
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Typography
+                    noWrap
+                    component="a"
+                    textAlign="center"
+                    sx={{
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                    onClick={logout}
+                  >
+                    {"Déconnexion"}
+                  </Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>

@@ -18,7 +18,7 @@ module.exports.signUp = async (req, res) => {
   //   create user object and add to db
   try {
     const user = await userModel.create({ pseudo, email, password });
-    res.status(200).json({ user: user._id });
+    res.status(200).json({ data: { user: user._id } });
   } catch (err) {
     const errors = signUpErrors(err);
     res.status(201).send({ errors });
@@ -30,7 +30,7 @@ module.exports.signIn = async (req, res) => {
   try {
     const user = await userModel.login(email, password);
     const token = createToken(user._id);
-    res.status(200).json({ userId: user._id, token });
+    res.status(200).json({ data: { userId: user._id, token } });
   } catch (err) {
     const errors = signInErrors(err);
     res.status(201).send({ errors });
