@@ -14,7 +14,7 @@ module.exports.addIdem = async (req, res) => {
       description,
       picture,
     });
-    res.status(200).json({ idem });
+    res.status(200).json({ data: { idem } });
   } catch (err) {
     res.status(200).send({ err });
   }
@@ -62,7 +62,7 @@ exports.updateItem = async (req, res) => {
         setDefaultsOnInsert: true,
       }
     )
-    .then((docs) => res.status(200).json(docs))
+    .then((docs) => res.status(200).json({ data: { docs } }))
     .catch((error) => res.status(400).json({ message: error }));
 };
 
@@ -73,6 +73,8 @@ exports.deleteItem = (req, res) => {
 
   itemModel
     .deleteOne({ _id: req.params.id })
-    .then(() => res.status(200).json({ message: "successfully deleted !" }))
+    .then(() =>
+      res.status(200).json({ data: { message: "successfully deleted !" } })
+    )
     .catch((error) => res.status(400).json({ error }));
 };
