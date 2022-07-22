@@ -74,7 +74,8 @@ const ItemCard = ({ post, count }) => {
             console.log(res.data.error);
           }
           if (res.data.data) {
-            dispatch(getPosts(count));
+            if (count) dispatch(getPosts(count));
+            else dispatch(getPosts());
           }
         })
         .catch((err) => console.log(err));
@@ -90,6 +91,7 @@ const ItemCard = ({ post, count }) => {
   };
   const handleClose = () => {
     setOpen(false);
+    setErr(false);
     cancel();
   };
 
@@ -162,7 +164,8 @@ const ItemCard = ({ post, count }) => {
             API_BASIC.put(`/item/${dataUpdate._id}`, data)
               .then((res) => {
                 if (res.data.data) {
-                  dispatch(getPosts(5));
+                  if (count) dispatch(getPosts(5));
+                  else dispatch(getPosts());
                   handleClose();
                 } else {
                   setErr(true);
@@ -178,8 +181,8 @@ const ItemCard = ({ post, count }) => {
     } else {
       API_BASIC.put(`/item/${dataUpdate._id}`, data)
         .then((res) => {
-          console.log(res.data);
-          dispatch(getPosts(5));
+          if (count) dispatch(getPosts(5));
+          else dispatch(getPosts());
           handleClose();
         })
         .catch((err) => {
@@ -202,7 +205,6 @@ const ItemCard = ({ post, count }) => {
         files.type === "image/png"
       ) {
         setUrl(URL.createObjectURL(files));
-        console.log(URL.createObjectURL(files));
 
         setFile(files);
       } else {
@@ -215,12 +217,13 @@ const ItemCard = ({ post, count }) => {
     setDescription("");
     setFile("");
     setPicture("");
+    setUrl("");
   };
 
   React.useEffect(() => {
     const checkAuthor = () => {
       if (uid == post.posterId) setIsAuthor(true);
-      console.log(isAuthor);
+    
     };
     checkAuthor();
   }, [uid, post._id]);
@@ -333,6 +336,9 @@ const ItemCard = ({ post, count }) => {
                   (.png, .jpg, .jpeg)
                 </Alert>
               )}
+              <Stack sx={{ width: "100%", marginBottom: "20px" }} spacing={2}>
+                <Alert>Editer votre article</Alert>
+              </Stack>
               <TextField
                 fullWidth
                 label="titre"

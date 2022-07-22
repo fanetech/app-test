@@ -1,6 +1,8 @@
+import { Alert, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "../actions/post.actions";
+import { UidContext } from "../components/appContext";
 import ItemCard from "../components/items/ItemCard";
 import { isEmpty } from "../components/utility/utils";
 
@@ -11,7 +13,7 @@ function Home(props) {
   const [count, setCount] = useState(5);
   const dispatch = useDispatch();
   const posts = useSelector((state) => state.postReducer);
-  console.log(posts);
+  const uid = React.useContext(UidContext);
 
   const loadMore = () => {
     if (
@@ -32,6 +34,20 @@ function Home(props) {
   }, [loadPost, dispatch, count]);
   return (
     <div className="home-conatiner">
+      <Stack sx={{ width: "100%", marginBottom: "20px" }} spacing={2}>
+        <Alert>
+          Bienvenue dans E-ARTICLE : nous stockons vos articles et nous le
+          rendons accéssible à tous le mondes
+        </Alert>
+      </Stack>
+      {!uid && (
+        <Stack sx={{ width: "100%", marginBottom: "20px" }} spacing={2}>
+          <Alert variant="filled" severity="error">
+            Vous devez vous connecter pour créer votre article et manager vos
+            articles
+          </Alert>
+        </Stack>
+      )}
       {!isEmpty(posts[0]) &&
         posts.map((post) => {
           return (

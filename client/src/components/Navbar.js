@@ -74,6 +74,7 @@ const Navbar = () => {
   const handleOpen = (e) => {
     e.preventDefault();
     setOpen(true);
+    setErr(false);
   };
   const handleClose = () => {
     cancel();
@@ -273,18 +274,7 @@ const Navbar = () => {
                     <Typography textAlign="center">Accueil</Typography>
                   </MenuItem>
                 </Link>
-                <Link
-                  href="/all-article"
-                  variant="body2"
-                  sx={{
-                    textDecoration: "none",
-                    color: "inherit",
-                  }}
-                >
-                  <MenuItem key={"allArticle"} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">Article</Typography>
-                  </MenuItem>
-                </Link>
+
                 <Link
                   href="/article"
                   variant="body2"
@@ -346,15 +336,7 @@ const Navbar = () => {
                   {"Accueil"}
                 </Button>
               </Link>
-              <Link href="/all-article" variant="body2">
-                <Button
-                  key={"Allarticle"}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {"Article"}
-                </Button>
-              </Link>
+
               {uid && (
                 <Link href="/article" variant="body2">
                   <Button
@@ -408,20 +390,7 @@ const Navbar = () => {
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))} */}
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography
-                    noWrap
-                    component="a"
-                    textAlign="center"
-                    href="/profil"
-                    sx={{
-                      textDecoration: "none",
-                      color: "inherit",
-                    }}
-                  >
-                    {"Profil"}
-                  </Typography>
-                </MenuItem>
+
                 {!uid && (
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography
@@ -515,6 +484,11 @@ const Navbar = () => {
                   (.png, .jpg, .jpeg)
                 </Alert>
               )}
+              <Stack sx={{ width: "100%", marginBottom: "20px" }} spacing={2}>
+                <Alert>
+                  Créer un article : Seul le champs image peux très null
+                </Alert>
+              </Stack>
               <TextField
                 fullWidth
                 label="titre"
