@@ -4,8 +4,6 @@ import Button from "@mui/material/Button";
 import Alert from "@mui/material/Alert";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -44,6 +42,8 @@ export default function Register() {
   const [passErr, setPassErr] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [isResus, setIsResus] = React.useState(false);
+
+  //get pseudo, email, password and add to DB
   const handleSubmit = (event) => {
     setFieldErr("");
     setPassErr("");

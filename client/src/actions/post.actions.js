@@ -14,9 +14,10 @@ export const getPosts = (num) => {
   return (dispatch) => {
     return API_BASIC.get(`/item`)
       .then(async (res) => {
-        const array = res.data.slice(0, num);
-        dispatch({ type: GET_POSTS, payload: array });
-        dispatch({ type: GET_ALL_POSTS, payload: res.data });
+        if (num) {
+          const array = res.data.slice(0, num);
+          dispatch({ type: GET_POSTS, payload: array });
+        } else dispatch({ type: GET_ALL_POSTS, payload: res.data });
       })
       .catch((err) => console.log(err));
   };
