@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server"
+    "watch": "nodemon server",
+    "start": "node server",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build"
   },
   "keywords": [],
   "author": "",
