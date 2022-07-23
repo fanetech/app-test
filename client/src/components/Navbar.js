@@ -1,4 +1,6 @@
 import * as React from "react";
+
+//mui import
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,8 +15,6 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import { UidContext } from "./appContext";
-import cookie from "js-cookie";
 import {
   Alert,
   Backdrop,
@@ -26,6 +26,10 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+
+//custom import
+import { UidContext } from "./appContext";
+import cookie from "js-cookie";
 import API_BASIC from "./utility/api.service";
 import { useDispatch, useSelector } from "react-redux";
 import { storage } from "./firebase";
@@ -49,6 +53,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.userReducer);
 
+  //mui function
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -63,12 +68,15 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  //custom function
   const logout = () => {
     if (window !== "undefined") {
       window.location = "/";
       cookie.remove("jwt");
     }
   };
+
   //model function
   const [open, setOpen] = React.useState(false);
   const handleOpen = (e) => {
@@ -82,7 +90,6 @@ const Navbar = () => {
   };
 
   //modal style
-
   const style = {
     position: "absolute",
     top: "50%",
@@ -196,6 +203,8 @@ const Navbar = () => {
       }
     }
   };
+
+  //clear all variable
   const cancel = () => {
     setTitle("");
     setDescription("");
@@ -257,11 +266,6 @@ const Navbar = () => {
                   display: { xs: "block", md: "none" },
                 }}
               >
-                {/* {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))} */}
                 <Link
                   href="/"
                   variant="body2"
@@ -318,15 +322,6 @@ const Navbar = () => {
               A-ARTICLE
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {/* {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))} */}
               <Link href="/" variant="body2">
                 <Button
                   key={"accueil"}
@@ -384,13 +379,6 @@ const Navbar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {/* {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))} */}
-
                 {!uid && (
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography

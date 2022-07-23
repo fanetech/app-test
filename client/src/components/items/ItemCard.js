@@ -61,9 +61,12 @@ const ItemCard = ({ post, count }) => {
   const uid = React.useContext(UidContext);
   const dispatch = useDispatch();
 
+  //mui function
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  //handle delete after validation confirmation
   const handledelede = (e, id) => {
     e.preventDefault();
 
@@ -81,7 +84,8 @@ const ItemCard = ({ post, count }) => {
         .catch((err) => console.log(err));
     }
   };
-  //model function
+
+  //model function. handle open and close modal
   const [open, setOpen] = React.useState(false);
   const handleOpen = (e, data) => {
     e.preventDefault();
@@ -223,7 +227,6 @@ const ItemCard = ({ post, count }) => {
   React.useEffect(() => {
     const checkAuthor = () => {
       if (uid == post.posterId) setIsAuthor(true);
-    
     };
     checkAuthor();
   }, [uid, post._id]);
@@ -279,23 +282,7 @@ const ItemCard = ({ post, count }) => {
               </IconButton>
             </>
           )}
-          {/* <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <ExpandMoreIcon />
-          </ExpandMore> */}
         </CardActions>
-        {/* <Collapse in={expanded} timeout="auto" unmountOnExit>
-          
-            <CardContent>
-              <Typography paragraph>Description:</Typography>
-              <Typography paragraph>{post?.description}</Typography>
-            </CardContent>
-          
-        </Collapse> */}
       </Card>
       <div>
         <Modal

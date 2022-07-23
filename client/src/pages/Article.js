@@ -1,4 +1,4 @@
-import { Alert, Button, Stack } from "@mui/material";
+import { Alert, Stack } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getPosts } from "../actions/post.actions";
